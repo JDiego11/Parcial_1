@@ -2,26 +2,35 @@
 
 int main()
 {
-    int dim = 8, cont = 0;
+    int dim = 8, func;
     bool **matriz = new bool*[dim];
 
     for(int i=0; i<dim; i++) {
         *(matriz+i) = new bool[dim];
     }
 
-    while(cont < 5) {
+    cout << "elija que quiere hacer: ";
+    cin >> func;
+    cout << endl;
+    switch (func) {
 
-        //Imprimimos la figura 1
-        PrintMatrix(Figure1(matriz, dim), dim);
+    case 1:                     //Función Verificación
+        Verificacion(matriz, dim);
+        PrintMatrix(matriz, dim);
+        cout << endl << endl;
+        break;
 
-        cout << endl << "Delay 1s" << endl << endl;
+    case 2:                     //Figura 1
+        Figure1(matriz, dim);
+        PrintMatrix(matriz, dim);
+        cout << endl << endl;
+        break;
 
-        //imprimimos la figura 2
-        PrintMatrix(Figure2(matriz, dim), dim);
-
-        cout << endl << "Delay 1s" << endl << endl;
-
-        cont++;
+    case 3:                     //Figura 2
+        Figure2(matriz, dim);
+        PrintMatrix(matriz, dim);
+        cout << endl << endl;
+        break;
     }
 
     for(int i=0; i<dim; i++) {

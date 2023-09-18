@@ -5,8 +5,9 @@
 
 using namespace std;
 
-bool **Figure1(bool **, int);
-bool **Figure2(bool**, int);
+void Verificacion(bool**, int);
+void Figure1(bool **, int);
+void Figure2(bool**, int);
 void PrintMatrix(bool**, int);
 
 #endif // FIGURAS_H

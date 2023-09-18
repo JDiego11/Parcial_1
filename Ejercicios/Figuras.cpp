@@ -1,6 +1,19 @@
 #include "Figuras.h"
 
-bool **Figure1(bool **matriz, int dim) {
+void Verificacion(bool **matrix, int size)
+{
+    cout << "Ejecutando verificacion de leds:" << endl;
+    for (int i=0; i<size; i++) {
+        for (int j=0; j<size; j++) {
+            matrix[i][j] = true;
+        }
+    }
+
+    //return matrx;
+}
+
+void Figure1(bool **matriz, int dim) {
+    cout << "Mostrando Figura 1:" << endl;
     int mid = dim/2;
     for(int i=0; i<dim; i++) {
         for(int j=0; j<dim; j++) {
@@ -16,17 +29,17 @@ bool **Figure1(bool **matriz, int dim) {
             }
         }
     }
-    return matriz;
+    //return matriz;
 }
-
-bool **Figure2(bool **matriz, int dim) {
+void Figure2(bool **matriz, int dim) {
+    cout << "Mostrando Figura 2:" << endl;
     for(int i=0; i<dim; i++) {
         for(int j=0; j<dim; j++) {
             if (i==j || (i+j) == (dim-1)) matriz[i][j] = true;
             else matriz[i][j] = false;
         }
     }
-    return matriz;
+    //return matriz;
 }
 
 void PrintMatrix(bool **matrix, int size) {
