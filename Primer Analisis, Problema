@@ -15,3 +15,9 @@ Consideraciones que dificultad el desarrollo del problema
  
 Segunda Idea:
 . Tomamos la decisión de primero realizar todo en la plataforma QT, algoritmos de figuras, función Publik, función imagen y verificación.
+
+Tercera Idea:
+. Utilizar una matriz booleana, que retorne valores 0 y 1 para así programar el encendido y apagado de la matrices led.
+
+Cuarta Idea:
+. Utilizar el mismo ingreso binario para los demás puntos donde se personaliza la visualización, así se facilita el trabajo.
