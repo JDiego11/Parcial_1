@@ -1,0 +1,15 @@
+Analisis del Problema.
+Circuito
+
+
+
+
+
+
+Problema.
+Idea Principal: Basado en la construcción de la matriz led 8x8, hay que realizar una implementación de código para la simulación de una pantalla LED.
+Objetivo
+. Generar patrones de visualización para la pantalla.
+Consideraciones que dificultad el desarrollo del problema
+. Escribir el código de manera inmediata en TINKERCARD, para nosotros resulta poco amigable la generación de los algoritmos con su sintaxis.
+ 
