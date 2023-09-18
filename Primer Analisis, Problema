@@ -9,7 +9,7 @@ Circuito
 Problema.
 Idea Principal: Basado en la construcción de la matriz led 8x8, hay que realizar una implementación de código para la simulación de una pantalla LED.
 Objetivo
-. Generar patrones de visualización para la pantalla.
+. Generar patrones de visualización para la pantalla. Generales y específicos
 Consideraciones que dificultad el desarrollo del problema
 . Escribir el código de manera inmediata en TINKERCARD, para nosotros resulta poco amigable la generación de los algoritmos con su sintaxis.
  
@@ -21,3 +21,7 @@ Tercera Idea:
 
 Cuarta Idea:
 . Utilizar el mismo ingreso binario para los demás puntos donde se personaliza la visualización, así se facilita el trabajo.
+
+Quinta Idea:
+. Para la función Publik, y todo lo relacionado a encendido y apagado por periodos, dependen del ingreso del usuario junto la alternancia de patrones que iremos trabajando como se mencionó anteriormente.
+
