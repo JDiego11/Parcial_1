@@ -13,3 +13,5 @@ Objetivo
 Consideraciones que dificultad el desarrollo del problema
 . Escribir el código de manera inmediata en TINKERCARD, para nosotros resulta poco amigable la generación de los algoritmos con su sintaxis.
  
+Segunda Idea:
+. Tomamos la decisión de primero realizar todo en la plataforma QT, algoritmos de figuras, función Publik, función imagen y verificación.
