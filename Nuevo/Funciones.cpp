@@ -39,6 +39,7 @@ void Verificacion(bool **matrix, int size)
                 matrix[i][j] = true;
             }
         }
+        PrintMatrix(matrix, size);
         //Delay(T1*(1000)) -> tiempo en milisegundos
         //Leds apagados
         for (int i=0; i<size; i++) {
@@ -46,6 +47,7 @@ void Verificacion(bool **matrix, int size)
                 matrix[i][j] = false;
             }
         }
+        PrintMatrix(matrix, size);
         //Delay(T2*(1000)) -> tiempo en milisegundos
     }
 }
@@ -169,7 +171,6 @@ void Publik(bool **matriz, int dim)
 
     case 1:
         Verificacion(matriz, dim);
-        PrintMatrix(matriz, dim);
         break;
 
     case 2:

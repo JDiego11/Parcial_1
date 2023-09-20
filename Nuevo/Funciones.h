@@ -13,7 +13,7 @@ void Figure1(bool**, int);              //Función que replica la primera figura
 void Figure2(bool**, int);              //Función que replica la segunda figura mostrada en el documento
 void Figure3(bool**, int);              //Función que replica la tercera figura mostrada en el documento
 void Figure4(bool**, int);              //Función que replica la cuarta figura mostrada en el documento
-void Sequence(bool**, int);   //Muestra la secuencia de las figuras 1-4 un número n veces con un tiempo t entre
+void Sequence(bool**, int);             //Muestra la secuencia de las figuras 1-4 un número n veces con un tiempo t entre
                                         //patrón
 
 void PrintMatrix(bool**, int);          //Función que imprime la representación matricial del funcionamiento de los leds
