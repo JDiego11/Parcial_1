@@ -21,14 +21,33 @@ void Imagen(bool**matriz, int size)
 
 void Verificacion(bool **matrix, int size)
 {
-    cout << "Ejecutando verificacion de leds:" << endl;
-    for (int i=0; i<size; i++) {
-        for (int j=0; j<size; j++) {
-            matrix[i][j] = true;
-        }
-    }
+    int Repe, time_1, time_2;
+    cout << "Ingrese la cantida N veces que quiere que se repita la verificacion: N=";
+    cin >> Repe;
+    cout << "Ingrese el tiempo T1 indicando la duracion de los leds encendidos: T1= ";
+    cin >> time_1;
+    cout << "Ingrese el tiempo T2 indicando la duracion de los leds apagados: T2= ";
+    cin >> time_2;
 
-    //return matrx;
+    cout << "Ejecutando verificacion de leds:" << endl;
+
+    //Repeticiones de los leds encendidos y apagados
+    for (int i=0; i<Repe; i++ ) {
+        //Leds encendidos
+        for (int i=0; i<size; i++) {
+            for (int j=0; j<size; j++) {
+                matrix[i][j] = true;
+            }
+        }
+        //Delay(T1*(1000)) -> tiempo en milisegundos
+        //Leds apagados
+        for (int i=0; i<size; i++) {
+            for (int j=0; j<size; j++) {
+                matrix[i][j] = false;
+            }
+        }
+        //Delay(T2*(1000)) -> tiempo en milisegundos
+    }
 }
 
 void Figure1(bool **matriz, int dim) {
@@ -101,6 +120,32 @@ void Figure4(bool **matriz, int dim){
     }
 }
 
+void Sequence(bool**matriz, int dim)
+{
+    int Repe, time;
+    cout << "Acontinuacion se van a mostrar 4 patrones ya declarados" << endl;
+    cout << "Ingrese la cantida N veces que quiere que se repita el patron: N=";
+    cin >> Repe;
+    cout << "Ingrese el tiempo T que se visualizara cada patron: T= ";
+    cin >> time;
+
+    //Ciclo para repetir los patrones
+    for (int i=0; i<Repe; i++) {
+        Figure1(matriz, dim);
+        PrintMatrix(matriz, dim);
+        //Delay(T*(1000)) -> Tiempo en milisegundos
+        Figure2(matriz, dim);
+        PrintMatrix(matriz, dim);
+        //Delay(T*(1000)) -> Tiempo en milisegundos
+        Figure3(matriz, dim);
+        PrintMatrix(matriz, dim);
+        //Delay(T*(1000)) -> Tiempo en milisegundos
+        Figure4(matriz, dim);
+        PrintMatrix(matriz, dim);
+        //Delay(T*(1000)) -> Tiempo en milisegundos
+    }
+}
+
 void PrintMatrix(bool **matrix, int size){
     for(int i=0; i<size; i++) {
         for(int j=0; j<size; j++) {
@@ -110,7 +155,30 @@ void PrintMatrix(bool **matrix, int size){
     }
 }
 
-void Publik(bool **, int)
+void Publik(bool **matriz, int dim)
 {
+    int opcion;
+    cout << "Menu: Estas son las funciones que puedes realizar." << endl;
+    cout << "1. Ejecutar la verificación de los leds." << endl;
+    cout << "2. Un patron personalizado o imagen de prueba." << endl;
+    cout << "3. Mostrar de forma altermada 4 patrones ya predeterminados." << endl;
+    cout << "Elije una opcion: ";
+    cin >> opcion;
 
+    switch (opcion) {
+
+    case 1:
+        Verificacion(matriz, dim);
+        PrintMatrix(matriz, dim);
+        break;
+
+    case 2:
+        Imagen(matriz, dim);
+        PrintMatrix(matriz, dim);
+        break;
+
+    case 3:
+        Sequence(matriz, dim);
+        break;
+    }
 }

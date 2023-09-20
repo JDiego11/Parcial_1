@@ -11,8 +11,7 @@ int main()
     }
 
     //Funciones a llamar
-    Imagen(matriz, dim);
-    PrintMatrix(matriz, dim);
+    Publik(matriz, dim);
 
     //Liberamos la memoria ocupada por la matriz
     for(int i=0; i<dim; i++) {
