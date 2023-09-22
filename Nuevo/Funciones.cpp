@@ -160,12 +160,16 @@ void PrintMatrix(bool **matrix, int size){
 void Publik(bool **matriz, int dim)
 {
     int opcion;
-    cout << "Menu: Estas son las funciones que puedes realizar." << endl;
-    cout << "1. Ejecutar la verificación de los leds." << endl;
+    cout << "Menu:\nEstas son las funciones que puedes realizar." << endl;
+    cout << "1. Ejecutar la verificacion de los leds." << endl;
     cout << "2. Un patron personalizado o imagen de prueba." << endl;
     cout << "3. Mostrar de forma altermada 4 patrones ya predeterminados." << endl;
-    cout << "Elije una opcion: ";
+    cout << "Elija una opcion: ";
     cin >> opcion;
+    while (opcion < 1 || opcion > 3) {
+        cout << "La entrada " << opcion << " no es valida, intente de nuevo: ";
+        cin >> opcion;
+    }
 
     switch (opcion) {
 
