@@ -1,0 +1,382 @@
+const int SER = 2;
+const int RCLK = 3;
+const int SRCLK = 4;
+
+int dim = 8;
+//bool **matriz = new bool*[dim];
+//int *N_Fila = new int[dim];
+int *N_Fila;
+bool **matriz;
+int N1, N2, N3, N4, N5, N6, N7, N8;
+
+void setup()
+{
+  Serial.begin(9600);
+  
+  pinMode(SER	, OUTPUT);
+  pinMode(RCLK	, OUTPUT);
+  pinMode(SRCLK	, OUTPUT);
+}
+
+void loop(){
+  matriz = new bool*[dim];
+  for (int i=0; i<dim; i++) {
+    matriz[i] = new bool[dim];
+  }
+  
+  /*En este arreglo se almacenan los leds encendidos por fila
+  Pero convertidos de binario a numero entero*/
+  N_Fila = new int[dim];
+  
+  Publik(matriz, dim, N_Fila);
+  //Verificacion(matriz, dim, N_Fila);
+  //Sequence(matriz, dim, N_Fila);
+  //Imagen(matriz, dim, N_Fila);
+  
+  for (int i=0; i<dim; i++) {
+    delete matriz[i];
+  }
+  delete[] matriz;
+  delete N_Fila;
+}
+
+/*************************************************************************
+Esta función convierte el número booleano que se forman con los 1 y 0 de
+las filas de las matriz a su representación en entero
+*************************************************************************/
+void Bin2Int(bool **matriz, int dim, int *NumFila_Int) {
+  int aux = 0;
+  for(int i=0; i<dim; i++) {
+    for(int j=0; j<dim; j++) {
+      aux += (matriz[i][j]) * (Pow(2,(dim-1-j)));
+    }
+    NumFila_Int[i] = aux;
+    aux = 0;
+  }
+}
+
+/***************************************************************************
+Función que calcula la potencia de un número, entra la base y el expenonete
+***************************************************************************/
+int Pow(int base, int expo) {
+    int num = 1;
+    for(int i=0; i<expo; i++) {
+        num *= base;
+    }
+    return num;
+}
+
+void Publik(bool **matrix, int size, int* NumFila_Int)
+{
+  int opcion;
+  Serial.println("Menu:\nEstas son las funciones que puedes realizar.");
+  Serial.println("1. Ejecutar la verificacion de los leds.");
+  Serial.println("2. Un patron personalizado o imagen de prueba.");
+  Serial.println("3. Mostrar de forma altermada 4 patrones ya predeterminados.");
+  Serial.println("Elija una opcion: ");
+  while (!Serial.available() > 0);
+  opcion = Serial.parseInt();
+  while (opcion < 1 || opcion > 3) {
+    Serial.print("La entrada ");
+    Serial.print(opcion);
+    Serial.println(" no es valida, intente de nuevo: ");
+    while (!Serial.available() > 0);
+    opcion = Serial.parseInt();
+  }
+
+  switch (opcion) {
+
+    case 1:
+    Verificacion(matrix, size, NumFila_Int);
+    break;
+
+    case 2:
+    Imagen(matrix, size, NumFila_Int);
+    break;
+
+    case 3:
+    Sequence(matrix, size, NumFila_Int);
+    break;
+  }
+}
+
+/****************************************************************************************
+La función verificación encenderá y apagará los ledes periódicamente, el usuario
+tendrá que ingresar cuántas veces quiere que los leds se enciendan y se apaguen, además
+de también la duración en segundos de los leds encendidos y apagados
+****************************************************************************************/
+void Verificacion(bool **matrix, int size, int* NumFila_Int)
+{
+  int Repe, time_1, time_2;
+  Serial.println("Ingrese la cantida N veces que quiere que se repita la verificacion: N=");
+  while (!Serial.available() > 0);
+  Repe = Serial.parseInt();
+  Serial.println("Para el tiempo ingrese un entero: 1= medio segundo, 2: un segundo, 3: segundo y medio...");
+  Serial.println("Ingrese el tiempo T1 indicando la duracion de los leds encendidos: T1= ");
+  while (!Serial.available() > 0);
+  time_1 = Serial.parseInt();
+  Serial.println("Ingrese el tiempo T2 indicando la duracion de los leds apagados: T2= ");
+  while (!Serial.available() > 0);
+  time_2 = Serial.parseInt();
+
+  Serial.println("Ejecutando verificacion de leds:");
+  Serial.print(Repe);
+  Serial.print(" Repeticiones, ");
+  Serial.print(time_1);
+  Serial.print(" seg. leds encendidos y ");
+  Serial.print(time_2);
+  Serial.println(" seg. leds apagados");
+
+  //Repeticiones de los leds encendidos y apagados
+  for (int i=0; i<Repe; i++ ) {
+    //Leds encendidos
+    for (int i=0; i<size; i++) {
+      for (int j=0; j<size; j++) {
+        matrix[i][j] = true;
+      }
+    }
+    Bin2Int(matrix, dim, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time_1)*500);
+    
+    //Leds apagados
+    for (int i=0; i<size; i++) {
+      for (int j=0; j<size; j++) {
+        matrix[i][j] = false;
+      }
+    }
+    Bin2Int(matrix, dim, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time_2)*500);
+  }
+}
+
+/************************************************************************
+La función Imagen pedirá al usuario alguna imagen que éste quiera
+visualizar, también hará algo parecido a la función verificación, ya que
+encenderá y apagará los leds periódicamente
+************************************************************************/
+void Imagen(bool **matrix, int size, int* NumFila_Int)
+{
+  bool **aux =new bool*[size];
+  for (int i=0; i<size; i++) {
+    aux[i] = new bool[size];
+  }
+  int aux_led, rep, time_on, time_off;
+  long long int fila;
+  Serial.println("Para ingresar el patron personalizado tenga en cuenta que...");
+  Serial.println("Vas a ingresar fila por fila de la matriz.");
+  Serial.println("Considerando que los 1 significa led encendido y 0 led apagado");
+
+  for(int i=0; i<size; i++) {
+    Serial.print("Fila No ");
+    Serial.println(i+1);
+    while (!Serial.available() > 0);
+    fila = Serial.parseInt();
+    for (int j=0; j<size; j++) {
+      aux_led = fila%10;
+      fila /= 10;
+      matrix[i][size-1-j] = aux_led;
+      /*if (aux_led) matrix[i][size-1-j] = true;
+      else matrix[i][size-1-j] = false;*/
+    }
+  }
+  
+  Serial.println("Ingrese cuantas veces quiere que se repita el patron:");
+  while (!Serial.available() > 0);
+  rep = Serial.parseInt();
+  Serial.println("Ingrese el tiempo que quiere que duren los leds encendidos:");
+  while (!Serial.available() > 0);
+  time_on = Serial.parseInt();
+  Serial.println("Ingrese el tiempo que quiere que duren los leds apagados:");
+  while (!Serial.available() > 0);
+  time_off = Serial.parseInt();
+  
+  for (int i=0; i<rep; i++) {
+    Bin2Int(matrix, size, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time_on)*500);
+    
+    //Leds apagados
+    for (int i=0; i<size; i++) {
+      for (int j=0; j<size; j++) {
+        aux[i][j] = false;
+      }
+    }
+    Bin2Int(aux, size, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time_off)*500);
+  }
+  
+  for (int i=0; i<size; i++) {
+    delete aux[i];
+  }
+  delete[] aux;
+}
+
+/****************************************************************************
+La función Sequence muestra 4 patrones ya definidos uno por uno, cada patrón
+se muestra un número N de veces que será indicado por el susario y cada uno
+tendrá una duración de T segundos, la cuál también la dará el usuario
+****************************************************************************/
+void Sequence(bool **matrix, int size, int* NumFila_Int)
+{
+  int Repe, time;
+  Serial.println("Acontinuacion se van a mostrar 4 patrones ya declarados");
+  Serial.println("Ingrese la cantida N veces que quiere que se repita el patron: N=");
+  while (!Serial.available() > 0);
+  Repe = Serial.parseInt();
+  Serial.println("Ingrese el tiempo T que se visualizara cada patron: T= ");
+  while (!Serial.available() > 0);
+  time = Serial.parseInt();
+
+  //Ciclo para repetir los patrones
+  for (int i=0; i<Repe; i++) {
+    Figure1(matriz, size, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time)*500);
+
+    Figure2(matriz, size, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time)*500);
+
+    Figure3(matriz, size, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time)*500);
+
+    Figure4(matriz, size, NumFila_Int);
+    ledWrite(N_Fila[0],N_Fila[1],N_Fila[2],N_Fila[3],
+             N_Fila[4],N_Fila[5],N_Fila[6],N_Fila[7]);
+    delay((time)*500);
+  }
+}
+
+/**********************************
+Genera el primer patrón de ejemplo
+**********************************/
+void Figure1(bool **matriz, int size, int* NumFila_Int) {
+  int mid = size/2;
+  for(int i=0; i<size; i++) {
+    for(int j=0; j<size; j++) {
+      if (j<=(mid-1)) {
+        if (i<=(mid-1) && j>=(mid-1)-i) matriz[i][j] = true;
+        else if(i>(mid-1) && j>=(i-mid)) matriz[i][j] = true;
+          else matriz[i][j] = false;
+      }
+      else {
+        if (i<=(mid-1) && i>=(j-mid)) matriz[i][j] = true;
+        else if (i>mid-1 && (i+j)<=(mid*3)-1) matriz[i][j] = true;
+          else matriz[i][j] = false;
+      }
+    }
+  }
+  Bin2Int(matriz, size, NumFila_Int);
+}
+
+/***********************************
+Genera el segundo patrón de ejemplo
+***********************************/
+void Figure2(bool **matriz, int size, int* NumFila_Int) {
+  for(int i=0; i<size; i++) {
+    for(int j=0; j<size; j++) {
+      if (i==j || (i+j) == (size-1)) matriz[i][j] = true;
+      else matriz[i][j] = false;
+    }
+  }
+  Bin2Int(matriz, size, NumFila_Int);
+}
+
+/**********************************
+Genera el tercer patrón de ejemplo
+**********************************/
+void Figure3(bool **matriz, int size, int* NumFila_Int){
+  for (int i = 0; i < size; i++){
+    if ((i/2) % 2 == 0){
+      int pos = 2;
+      for (int k = 0; k < size; k++){
+        if ((i-i)+k == pos){
+          matriz[i][k] = false;
+          pos += 3;
+        }else{
+          matriz[i][k] = true;
+        }
+      }
+    }else{
+      for (int k = 0; k < size; k++) {
+        if (i - i + k % 3 == 0) {
+          matriz[i][k] = false;
+        } else {
+          matriz[i][k] = true;
+        }
+      }
+    }
+  }
+  Bin2Int(matriz, size, NumFila_Int);
+}
+
+/***********************************
+Genera el cuarto patrón de ejemplo
+***********************************/
+void Figure4(bool **matriz, int size, int* NumFila_Int){
+  for (int i = 0; i < size; i++){
+    for (int k = 0; k < size; k++){
+      if (i < size /2){
+        if (k - i < 0 or k - i > size/2 - 1){
+          matriz[i][k] = false;
+        }else{
+          matriz[i][k] = true;
+        }
+      }else{
+        if (k+i < size - 1 or k + i > size + (size/2) - 2){
+          matriz[i][k] = false;
+        }else
+          matriz[i][k] = true;
+      }
+    }
+  }
+  Bin2Int(matriz, size, NumFila_Int);
+}
+
+/********************************************************************
+Esta función es la encargada de organizar y encender los leds, tiene
+como entrada 8 números enteros, cada uno corresponde a los 8 leds por
+fila de la matriz.
+Ya que la idea es que 1 significa led encendido y 0 led apagado, si 
+tenemos, por ejemplo, 10011001 en alguna fila, con una conversión de
+binario a entero, el valor de la fila correspondiente será 153, y así
+con el resto de filas
+********************************************************************/
+void ledWrite(int F1, int F2, int F3, int F4,
+              int F5, int F6, int F7, int F8){
+  /***************************************************************************
+  La función shiftOut es una función integrada de Arduino con cuatro entradas.
+  SER: Es el puerto del arduino que toma las entradas, es decir, la información
+  SRCLK: Copia los 1 o 0 de las entradas en el registro.
+  BitOrder: Aquí usamos la palabra reservada LSBFIRST que significa
+  Less Significative Bit FIRST, es decir, que encenderá el led del bit menos
+  significativo primero (de derecha a izquierda). Si ponemos MSBFIRST, hará lo
+  contrario
+  Value: El valor en entero que hará que se enciendan ciertos leds.
+  ***************************************************************************/
+   shiftOut(SER, SRCLK, LSBFIRST, F8);
+   shiftOut(SER, SRCLK, LSBFIRST, F7);
+   shiftOut(SER, SRCLK, LSBFIRST, F6);
+   shiftOut(SER, SRCLK, LSBFIRST, F5);
+   shiftOut(SER, SRCLK, LSBFIRST, F4);
+   shiftOut(SER, SRCLK, LSBFIRST, F3);
+   shiftOut(SER, SRCLK, LSBFIRST, F2);
+   shiftOut(SER, SRCLK, LSBFIRST, F1);
+  /**********************************************************************
+  RCLK: Una vez guardados los 1 o 0 se genera un pulso para que el latch
+  los lleve a la salida
+  **********************************************************************/
+   digitalWrite(RCLK, HIGH);
+   digitalWrite(RCLK, LOW);
+}
